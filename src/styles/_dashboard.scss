@@ -1,0 +1,22 @@
+.dashboard {
+  position: relative;
+  .todos {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .todomodal {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.1);
+    @include center;
+    visibility: hidden;
+    // z-index: -5;
+  }
+
+  .todomodal.show {
+    visibility: visible;
+    z-index: 5;
+  }
+}
