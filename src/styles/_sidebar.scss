@@ -1,0 +1,17 @@
+.sidebar {
+  background-color: $primary;
+  width: 100px;
+  height: 100vh;
+  @include center;
+}
+
+.menu {
+  &-item {
+    margin: 80px 20px;
+    cursor: pointer;
+    i {
+      font-size: 2rem;
+      color: $white;
+    }
+  }
+}
