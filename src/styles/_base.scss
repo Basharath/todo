@@ -89,10 +89,11 @@ $gray3: #a7adba;
 
 body {
   font-family: $ff1;
-  width: 100vw;
+  // width: 100vw;
   // background: $background;
   // color: $light;
   overflow-x: hidden;
+  position: relative;
 }
 
 // ::selection {

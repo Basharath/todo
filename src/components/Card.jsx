@@ -5,7 +5,7 @@ export default function Card({ status, text, date }) {
     <div className="card">
       <div className="status">{status}</div>
       <div className="text">{text}</div>
-      <div className="date">{date.slice(0, 12)}</div>
+      <div className="date">{date}</div>
       <div className="btn btn-change">Mark as done</div>
     </div>
   );

@@ -49,7 +49,7 @@ export default function Dashboard() {
 
       <div
         className={'todomodal' + (show ? ' show' : '')}
-        // onClick={() => setShow(false)}
+        onClick={() => setShow(false)}
       >
         <AddTodo handleShow={handleShow} handleAddTodo={handleAddTodo} />
       </div>

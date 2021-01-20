@@ -18,7 +18,13 @@
   .text {
     color: $dark;
     font-size: 1.15rem;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    height: 65px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
 
   .date {
