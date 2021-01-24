@@ -3,6 +3,13 @@
   width: 100px;
   height: 100vh;
   @include center;
+  flex-direction: column;
+
+  @media (max-width: $md) {
+    height: fit-content;
+    width: auto;
+    background-color: transparent;
+  }
 }
 
 .menu {
@@ -13,5 +20,38 @@
       font-size: 2rem;
       color: $white;
     }
+  }
+}
+
+@media (max-width: $md) {
+  .menu {
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+
+    &.show {
+      visibility: visible;
+      opacity: 1;
+      z-index: 4;
+      background-color: $primary;
+    }
+  }
+}
+
+.toggler {
+  display: none;
+  padding: 5px;
+  i {
+    font-size: 2rem;
+  }
+
+  @media (max-width: $md) {
+    display: block;
+    z-index: 5;
+    position: sticky;
+    top: 10px;
   }
 }

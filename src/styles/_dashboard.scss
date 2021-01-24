@@ -1,9 +1,52 @@
 .dashboard {
-  // margin: 20px;
   display: flex;
+  height: 100vh;
+  overflow: hidden;
+
+  aside {
+    width: 100px;
+
+    @media (max-width: $md) {
+      width: fit-content;
+      padding: 10px;
+    }
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center !important;
+  }
+
+  .todos-container {
+    width: calc(100% - 100px);
+    overflow-y: scroll !important;
+    display: flex;
+
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
+    }
+  }
+
   .todos {
     display: flex;
     flex-wrap: wrap;
+    min-width: 100%;
+
+    @media (max-width: $md) {
+      padding: 10px;
+    }
+  }
+
+  @media (max-width: $md) {
+    flex-direction: column;
+    overflow-y: scroll;
+    .todos-container {
+      width: 100%;
+    }
   }
 }
 
@@ -15,7 +58,7 @@
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.2);
   @include center;
-  align-items: start;
+  align-items: flex-start;
   padding-top: 130px;
   visibility: hidden;
 }

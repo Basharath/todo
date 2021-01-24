@@ -21,6 +21,10 @@ export default function AddTodo({ handleAddTodo, handleShow }) {
     <div className="add-todo" onClick={(e) => e.stopPropagation()}>
       <div className="status">Todo</div>
 
+      <div className="close" onClick={handleShow}>
+        <i className="fas fa-times"></i>
+      </div>
+
       <textarea
         onChange={handleChange}
         type="text"

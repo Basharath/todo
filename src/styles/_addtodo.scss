@@ -2,19 +2,41 @@
   background-color: $white;
   padding: 20px;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
   .status {
     color: $primary;
     font-size: 1.3rem;
     margin-bottom: 10px;
   }
   textarea {
-    width: 100%;
+    width: 500px;
     padding: 5px;
-    height: 80px;
+    height: 150px;
     font-family: $ff1;
     font-size: 15px;
     border-radius: 5px;
     resize: none;
     margin-bottom: 10px;
+  }
+
+  .btn-add-todo {
+    width: 150px;
+    font-size: 1rem;
+  }
+
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.3rem;
+    cursor: pointer;
+
+    &:hover {
+      color: $dark;
+    }
   }
 }

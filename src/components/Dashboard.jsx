@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import Card from './Card';
 import AddTodo from './AddTodo';
 import Sidebar from './Sidebar';
+import SearchBar from './SearchBar';
 
 const list = [
   {
@@ -19,10 +20,56 @@ const list = [
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
   },
+  {
+    status: 'Todo',
+    text: 'Try to practice boxing everyday',
+    date: '21 January, 2020',
+  },
+  {
+    status: 'Todo',
+    text: 'Try to practice boxing everyday',
+    date: '21 January, 2020',
+  },
+  {
+    status: 'Todo',
+    text: 'Try to practice boxing everyday',
+    date: '21 January, 2020',
+  },
+  {
+    status: 'Todo',
+    text: 'Try to practice boxing everyday',
+    date: '21 January, 2020',
+  },
+  {
+    status: 'Todo',
+    text: 'Try to practice boxing everyday',
+    date: '21 January, 2020',
+  },
+  {
+    status: 'Todo',
+    text: 'Try to practice boxing everyday',
+    date: '21 January, 2020',
+  },
 ];
 
+const ACTION = {
+  ADD: 'add',
+  DELETE: 'delete',
+  EDIT: 'edit',
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case ACTION.ADD:
+      return [action.payload, ...state];
+
+    default:
+      return state;
+  }
+};
+
 export default function Dashboard() {
-  const [todoList, setTodoList] = useState(list);
+  const [todoList, dispatch] = useReducer(reducer, list);
   const [show, setShow] = useState(false);
 
   const handleAddTodo = (text, date) => {
@@ -30,14 +77,14 @@ export default function Dashboard() {
       status: 'Todo',
       text,
       date,
+      id: new Date().getTime(),
     };
 
-    const newList = [obj, ...todoList];
-    setTodoList(newList);
+    dispatch({ type: ACTION.ADD, payload: obj });
   };
 
   const handleShow = () => {
-    setShow(false);
+    setShow(!show);
   };
 
   return (
@@ -45,17 +92,15 @@ export default function Dashboard() {
       <aside>
         <Sidebar />
       </aside>
-      <main>
-        <div className="topbar">
-          <button className="btn btn-add-todo" onClick={() => setShow(true)}>
-            <i className="fas fa-plus"></i> Add Todo
-          </button>
-        </div>
 
-        <div className="todos">
-          {todoList.map((t, idx) => (
-            <Card key={idx} status={t.status} text={t.text} date={t.date} />
-          ))}
+      <main>
+        <SearchBar handleShow={handleShow} />
+        <div className="todos-container">
+          <div className="todos">
+            {todoList.map((t, idx) => (
+              <Card key={idx} status={t.status} text={t.text} date={t.date} />
+            ))}
+          </div>
         </div>
       </main>
 
