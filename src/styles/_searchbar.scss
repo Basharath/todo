@@ -32,10 +32,12 @@
     width: 400px;
     font-family: $ff1;
     font-size: 1rem;
-  }
 
-  @media (max-width: $md) {
-    input {
+    @media (max-width: $md) {
+      max-width: 320px;
+    }
+
+    @media (max-width: $xs) {
       max-width: 250px;
     }
   }

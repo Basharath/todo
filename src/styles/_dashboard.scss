@@ -44,6 +44,7 @@
   @media (max-width: $md) {
     flex-direction: column;
     overflow-y: scroll;
+    padding-top: 25px;
     .todos-container {
       width: 100%;
     }

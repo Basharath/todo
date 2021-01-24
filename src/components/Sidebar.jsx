@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export default function Sidebar() {
-  const [show, setShow] = useState(false);
   return (
     <div className="sidebar">
-      <div
-        className={'toggler' + (show ? ' show' : '')}
-        onClick={() => setShow(!show)}
-      >
-        <i className="fas fa-bars"></i>
-      </div>
-      <div className={'menu' + (show ? ' show' : '')}>
+      <div className="menu">
         <div className="menu-item">
           <i className="fas fa-th-large"></i>
         </div>

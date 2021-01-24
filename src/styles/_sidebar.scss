@@ -25,33 +25,36 @@
 
 @media (max-width: $md) {
   .menu {
-    visibility: hidden;
-    opacity: 0;
     transition: all 0.3s;
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: flex-start;
 
-    &.show {
-      visibility: visible;
-      opacity: 1;
-      z-index: 4;
-      background-color: $primary;
+    &-item {
+      margin: 15px;
     }
+    visibility: visible;
+    opacity: 1;
+    z-index: 4;
+    background-color: $primary;
   }
 }
 
-.toggler {
-  display: none;
-  padding: 5px;
-  i {
-    font-size: 2rem;
-  }
+// .toggler {
+//   display: none;
+//   padding: 5px 0;
+//   i {
+//     font-size: 2rem;
+//   }
 
-  @media (max-width: $md) {
-    display: block;
-    z-index: 5;
-    position: sticky;
-    top: 10px;
-  }
-}
+//   @media (max-width: $md) {
+//     display: block;
+//     z-index: 5;
+//     position: sticky;
+//     top: 10px;
+//   }
+// }
