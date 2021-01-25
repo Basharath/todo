@@ -5,11 +5,6 @@
 
   aside {
     width: 100px;
-
-    @media (max-width: $md) {
-      width: fit-content;
-      padding: 10px;
-    }
   }
 
   main {
@@ -22,13 +17,9 @@
     width: calc(100% - 100px);
     overflow-y: scroll !important;
     display: flex;
+    justify-content: center;
 
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-    scrollbar-width: none; /* Firefox */
-
-    &::-webkit-scrollbar {
-      display: none; /* Safari and Chrome */
-    }
+    @include hideScrollbar;
   }
 
   .todos {
@@ -39,14 +30,25 @@
     @media (max-width: $md) {
       padding: 10px;
     }
+
+    @media (min-width: 1400px) {
+      justify-content: center;
+    }
   }
 
   @media (max-width: $md) {
     flex-direction: column;
-    overflow-y: scroll;
+    // overflow-y: scroll;
     padding-top: 25px;
+
+    main {
+      margin-top: 20px;
+      overflow-y: scroll;
+      @include hideScrollbar;
+    }
     .todos-container {
       width: 100%;
+      overflow-y: scroll !important;
     }
   }
 }
@@ -62,6 +64,10 @@
   align-items: flex-start;
   padding-top: 130px;
   visibility: hidden;
+
+  @media (max-width: $sm) {
+    padding-top: 180px;
+  }
 }
 
 .todomodal.show {

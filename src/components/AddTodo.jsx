@@ -30,6 +30,7 @@ export default function AddTodo({ handleAddTodo, handleShow }) {
         type="text"
         placeholder="Go for swimming..."
         value={input}
+        autoFocus
       ></textarea>
 
       <button className="btn btn-add-todo" onClick={handleClick}>

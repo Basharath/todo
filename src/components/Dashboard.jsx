@@ -9,59 +9,81 @@ const list = [
     status: 'Todo',
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
+    favorite: false,
+    id: 1,
   },
   {
     status: 'Todo',
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
+    favorite: true,
+    id: 2,
   },
   {
     status: 'Todo',
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
+    favorite: false,
+    id: 3,
   },
   {
     status: 'Todo',
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
+    favorite: false,
+    id: 4,
   },
   {
     status: 'Todo',
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
+    favorite: false,
+    id: 5,
   },
   {
     status: 'Todo',
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
+    favorite: false,
+    id: 6,
   },
   {
     status: 'Todo',
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
+    favorite: false,
+    id: 7,
   },
   {
     status: 'Todo',
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
+    favorite: false,
+    id: 8,
   },
   {
     status: 'Todo',
     text: 'Try to practice boxing everyday',
     date: '21 January, 2020',
+    favorite: false,
+    id: 9,
   },
 ];
 
-const ACTION = {
+export const ACTION = {
   ADD: 'add',
   DELETE: 'delete',
   EDIT: 'edit',
+  FAVORITE: 'favorite',
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTION.ADD:
       return [action.payload, ...state];
+
+    case ACTION.FAVORITE:
+      return [...action.payload];
 
     default:
       return state;
@@ -77,6 +99,7 @@ export default function Dashboard() {
       status: 'Todo',
       text,
       date,
+      favorite: false,
       id: new Date().getTime(),
     };
 
@@ -98,7 +121,12 @@ export default function Dashboard() {
         <div className="todos-container">
           <div className="todos">
             {todoList.map((t, idx) => (
-              <Card key={idx} status={t.status} text={t.text} date={t.date} />
+              <Card
+                key={idx}
+                todoList={todoList}
+                todo={t}
+                dispatch={dispatch}
+              />
             ))}
           </div>
         </div>
