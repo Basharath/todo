@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
-import { getFormattedDate } from './../util';
+import React, { useState, useEffect } from 'react';
 
-export default function AddTodo({ handleAddTodo, handleShow }) {
+export default function AddTodo({
+  handleAddTodo,
+  handleShow,
+  currentTodo,
+  handleDelete,
+}) {
   const [input, setInput] = useState('');
-  const now = new Date();
-  const { short } = getFormattedDate(now);
+
+  const { text, id } = currentTodo;
+
+  useEffect(() => {
+    if (text) {
+      setInput(text);
+    }
+  }, [text]);
 
   const handleChange = ({ currentTarget }) => {
     setInput(currentTarget.value);
@@ -12,8 +22,13 @@ export default function AddTodo({ handleAddTodo, handleShow }) {
 
   const handleClick = () => {
     if (!input) return;
+    handleAddTodo(input, currentTodo.id);
+    handleShow();
     setInput('');
-    handleAddTodo(input, short);
+  };
+
+  const onDelete = () => {
+    handleDelete(id);
     handleShow();
   };
 
@@ -32,10 +47,16 @@ export default function AddTodo({ handleAddTodo, handleShow }) {
         value={input}
         autoFocus
       ></textarea>
-
-      <button className="btn btn-add-todo" onClick={handleClick}>
-        Add Todo
-      </button>
+      <div className="btn-row">
+        {id && (
+          <button className="btn btn-del-todo" onClick={onDelete}>
+            Delete Todo
+          </button>
+        )}
+        <button className="btn btn-add-todo" onClick={handleClick}>
+          {id ? 'Update Todo' : 'Add Todo'}
+        </button>
+      </div>
     </div>
   );
 }

@@ -8,13 +8,13 @@ export default function Sidebar() {
           <i className="fas fa-th-large"></i>
         </div>
         <div className="menu-item">
+          <i className="fas fa-hourglass-start"></i>
+        </div>
+        <div className="menu-item">
           <i className="fas fa-star"></i>
         </div>
         <div className="menu-item">
           <i className="fas fa-check-square"></i>
-        </div>
-        <div className="menu-item">
-          <i className="fas fa-trash-alt"></i>
         </div>
       </div>
     </div>

@@ -2,28 +2,56 @@ import React from 'react';
 
 import { ACTION } from './Dashboard';
 
-export default function Card({ todo, dispatch, todoList }) {
+export default function Card({ todo, dispatch, todoList, handleEdit }) {
   const { status, text, date, favorite, id } = todo;
-  const handleFavorite = () => {
-    const favTodo = todo;
-    favTodo.favorite = !favorite;
+
+  const updateTodo = (todo) => {
     const updated = [...todoList];
     const index = todoList.findIndex((i) => i.id === id);
-    updated[index] = favTodo;
+    updated[index] = todo;
 
-    dispatch({ type: ACTION.FAVORITE, payload: updated });
+    dispatch({ type: ACTION.UPDATE, payload: updated });
   };
+
+  const handleFavorite = () => {
+    const todoCopy = todo;
+    todoCopy.favorite = !favorite;
+    updateTodo(todoCopy);
+  };
+
+  const handleStatus = () => {
+    const newStatus = status === 'Todo' ? 'Started' : 'Done';
+    const todoCopy = todo;
+    todoCopy.status = newStatus;
+    updateTodo(todoCopy);
+  };
+
+  const style =
+    status === 'Todo'
+      ? { color: 'dodgerblue' }
+      : status === 'Started'
+      ? { color: 'tomato' }
+      : { color: '#00df00' };
+
+  const icon =
+    status === 'Todo'
+      ? 'paper-plane'
+      : status === 'Started'
+      ? 'hourglass-start'
+      : 'check';
 
   return (
     <div className="card">
-      <div className="status">{status}</div>
+      <div className="status" style={style}>
+        {status}
+      </div>
       <div className="text">{text}</div>
       <div className="date">{date}</div>
       <div className="row">
-        <div className="status-btn">
-          <i className="fas fa-check"></i>
+        <div className="status-btn" onClick={handleStatus} title={status}>
+          <i className={'fas fa-' + icon}></i>
         </div>
-        <div className="edit">
+        <div className="edit" onClick={() => handleEdit(text, id)}>
           <i className="fas fa-edit"></i>
         </div>
       </div>

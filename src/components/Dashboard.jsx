@@ -4,6 +4,8 @@ import AddTodo from './AddTodo';
 import Sidebar from './Sidebar';
 import SearchBar from './SearchBar';
 
+import { getFormattedDate } from './../util';
+
 const list = [
   {
     status: 'Todo',
@@ -75,6 +77,7 @@ export const ACTION = {
   DELETE: 'delete',
   EDIT: 'edit',
   FAVORITE: 'favorite',
+  UPDATE: 'update',
 };
 
 const reducer = (state, action) => {
@@ -82,7 +85,7 @@ const reducer = (state, action) => {
     case ACTION.ADD:
       return [action.payload, ...state];
 
-    case ACTION.FAVORITE:
+    case ACTION.UPDATE:
       return [...action.payload];
 
     default:
@@ -91,14 +94,28 @@ const reducer = (state, action) => {
 };
 
 export default function Dashboard() {
-  const [todoList, dispatch] = useReducer(reducer, list);
+  const [todoList, dispatch] = useReducer(reducer, []);
   const [show, setShow] = useState(false);
+  const [currentTodo, setCurrentTodo] = useState({ text: '', id: '' });
 
-  const handleAddTodo = (text, date) => {
+  const now = new Date();
+  const { short } = getFormattedDate(now);
+
+  const handleAddTodo = (text, id = '') => {
+    if (id) {
+      const index = todoList.findIndex((i) => i.id === id);
+      const todo = todoList[index];
+      todo.text = text;
+      const updated = [...todoList];
+      updated[index] = todo;
+      dispatch({ type: ACTION.UPDATE, payload: updated });
+      return;
+    }
+
     const obj = {
-      status: 'Todo',
       text,
-      date,
+      status: 'Todo',
+      date: short,
       favorite: false,
       id: new Date().getTime(),
     };
@@ -106,8 +123,15 @@ export default function Dashboard() {
     dispatch({ type: ACTION.ADD, payload: obj });
   };
 
-  const handleShow = () => {
+  const handleShow = (text = '', id = '') => {
+    if (id) setCurrentTodo({ text, id });
+    else setCurrentTodo({ id: '' });
     setShow(!show);
+  };
+
+  const handleDelete = (id) => {
+    const filtered = todoList.filter((i) => i.id !== id);
+    dispatch({ type: ACTION.UPDATE, payload: filtered });
   };
 
   return (
@@ -126,6 +150,7 @@ export default function Dashboard() {
                 todoList={todoList}
                 todo={t}
                 dispatch={dispatch}
+                handleEdit={handleShow}
               />
             ))}
           </div>
@@ -136,7 +161,12 @@ export default function Dashboard() {
         className={'todomodal' + (show ? ' show' : '')}
         onClick={() => setShow(false)}
       >
-        <AddTodo handleShow={handleShow} handleAddTodo={handleAddTodo} />
+        <AddTodo
+          handleShow={handleShow}
+          handleAddTodo={handleAddTodo}
+          currentTodo={currentTodo}
+          handleDelete={handleDelete}
+        />
       </div>
     </div>
   );

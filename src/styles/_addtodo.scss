@@ -4,7 +4,7 @@
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   position: relative;
 
   .status {
@@ -23,9 +23,28 @@
     margin-bottom: 10px;
   }
 
+  .btn-row {
+    display: flex;
+    padding: 5px 5px 0 5px;
+
+    .btn {
+      width: 150px;
+      font-size: 1rem;
+    }
+  }
+
   .btn-add-todo {
-    width: 150px;
-    font-size: 1rem;
+    margin-left: auto;
+  }
+
+  .btn-del-todo {
+    color: $gray;
+    border-color: $gray;
+
+    &:hover {
+      background-color: $dark;
+      color: $light;
+    }
   }
 
   .close {

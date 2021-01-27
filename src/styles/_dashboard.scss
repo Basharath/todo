@@ -9,8 +9,9 @@
 
   main {
     display: flex;
+    width: calc(100% - 100px);
     flex-direction: column;
-    align-items: center !important;
+    align-items: center;
   }
 
   .todos-container {
