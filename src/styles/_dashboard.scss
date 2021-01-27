@@ -39,11 +39,12 @@
 
   @media (max-width: $md) {
     flex-direction: column;
-    // overflow-y: scroll;
+    align-items: center;
     padding-top: 25px;
 
     main {
       margin-top: 20px;
+      width: auto;
       overflow-y: scroll;
       @include hideScrollbar;
     }
@@ -65,6 +66,7 @@
   align-items: flex-start;
   padding-top: 130px;
   visibility: hidden;
+  // display: none;
 
   @media (max-width: $sm) {
     padding-top: 180px;
@@ -74,4 +76,5 @@
 .todomodal.show {
   visibility: visible;
   z-index: 5;
+  // display: flex;
 }

@@ -5,6 +5,8 @@ export default function AddTodo({
   handleShow,
   currentTodo,
   handleDelete,
+  inputRef,
+  show,
 }) {
   const [input, setInput] = useState('');
 
@@ -14,7 +16,8 @@ export default function AddTodo({
     if (text) {
       setInput(text);
     }
-  }, [text]);
+    inputRef.current.focus();
+  }, [text, show, inputRef]);
 
   const handleChange = ({ currentTarget }) => {
     setInput(currentTarget.value);
@@ -30,6 +33,7 @@ export default function AddTodo({
   const onDelete = () => {
     handleDelete(id);
     handleShow();
+    setInput('');
   };
 
   return (
@@ -46,6 +50,7 @@ export default function AddTodo({
         placeholder="Go for swimming..."
         value={input}
         autoFocus
+        ref={inputRef}
       ></textarea>
       <div className="btn-row">
         {id && (

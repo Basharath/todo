@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useRef } from 'react';
 import Card from './Card';
 import AddTodo from './AddTodo';
 import Sidebar from './Sidebar';
@@ -94,9 +94,10 @@ const reducer = (state, action) => {
 };
 
 export default function Dashboard() {
-  const [todoList, dispatch] = useReducer(reducer, []);
+  const [todoList, dispatch] = useReducer(reducer, list);
   const [show, setShow] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({ text: '', id: '' });
+  const inputRef = useRef(null);
 
   const now = new Date();
   const { short } = getFormattedDate(now);
@@ -126,6 +127,7 @@ export default function Dashboard() {
   const handleShow = (text = '', id = '') => {
     if (id) setCurrentTodo({ text, id });
     else setCurrentTodo({ id: '' });
+    inputRef.current.focus();
     setShow(!show);
   };
 
@@ -166,6 +168,8 @@ export default function Dashboard() {
           handleAddTodo={handleAddTodo}
           currentTodo={currentTodo}
           handleDelete={handleDelete}
+          inputRef={inputRef}
+          show={show}
         />
       </div>
     </div>
