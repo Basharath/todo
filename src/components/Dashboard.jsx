@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useRef,
+  useCallback,
+} from 'react';
 import Card from './Card';
 import AddTodo from './AddTodo';
 import Sidebar from './Sidebar';
@@ -98,18 +104,25 @@ export default function Dashboard() {
   const [domTodoList, setDomTodoList] = useState(todoList);
   const [show, setShow] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({ text: '', id: '' });
+  const [searchText, setSearchText] = useState('');
   const inputRef = useRef(null);
 
   const now = new Date();
   const { short } = getFormattedDate(now);
 
-  useEffect(() => {
-    handleDomTodoList(todoList);
-  }, [todoList]);
-
   const handleDomTodoList = (list) => {
     setDomTodoList(list);
   };
+
+  const handleSearch = useCallback(() => {
+    const list = todoList.filter((i) => i.text.includes(searchText));
+    handleDomTodoList(list);
+  }, [searchText, todoList]);
+
+  useEffect(() => {
+    handleDomTodoList(todoList);
+    handleSearch();
+  }, [todoList, handleSearch]);
 
   const handleAddTodo = (text, id = '') => {
     if (id) {
@@ -152,7 +165,7 @@ export default function Dashboard() {
       </aside>
 
       <main>
-        <SearchBar handleShow={handleShow} />
+        <SearchBar handleShow={handleShow} onSearch={setSearchText} />
         <div className="todos-container">
           <div className="todos">
             {domTodoList.map((t, idx) => (

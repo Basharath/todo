@@ -44,7 +44,7 @@
 
     main {
       margin-top: 20px;
-      width: auto;
+      width: 100%;
       overflow-y: scroll;
       @include hideScrollbar;
     }

@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 
-export default function SearchBar({ handleShow }) {
-  const [input, setInput] = useState('');
-
-  const handleChange = ({ currentTarget }) => {
-    setInput(currentTarget);
-  };
+export default function SearchBar({ handleShow, onSearch }) {
+  const handleChange = useCallback(
+    ({ currentTarget }) => {
+      onSearch(currentTarget.value);
+    },
+    [onSearch]
+  );
 
   return (
     <div className="searchbar">
