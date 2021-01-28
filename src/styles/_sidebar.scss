@@ -15,10 +15,13 @@
 .menu {
   &-item {
     margin: 80px 20px;
+    @include center;
+
     cursor: pointer;
     i {
       font-size: 2rem;
       color: $white;
+      margin: 0 auto;
     }
   }
 }

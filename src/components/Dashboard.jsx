@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useRef } from 'react';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
 import Card from './Card';
 import AddTodo from './AddTodo';
 import Sidebar from './Sidebar';
@@ -95,12 +95,21 @@ const reducer = (state, action) => {
 
 export default function Dashboard() {
   const [todoList, dispatch] = useReducer(reducer, list);
+  const [domTodoList, setDomTodoList] = useState(todoList);
   const [show, setShow] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({ text: '', id: '' });
   const inputRef = useRef(null);
 
   const now = new Date();
   const { short } = getFormattedDate(now);
+
+  useEffect(() => {
+    handleDomTodoList(todoList);
+  }, [todoList]);
+
+  const handleDomTodoList = (list) => {
+    setDomTodoList(list);
+  };
 
   const handleAddTodo = (text, id = '') => {
     if (id) {
@@ -139,14 +148,14 @@ export default function Dashboard() {
   return (
     <div className="dashboard">
       <aside>
-        <Sidebar />
+        <Sidebar todoList={todoList} handleDomTodoList={handleDomTodoList} />
       </aside>
 
       <main>
         <SearchBar handleShow={handleShow} />
         <div className="todos-container">
           <div className="todos">
-            {todoList.map((t, idx) => (
+            {domTodoList.map((t, idx) => (
               <Card
                 key={idx}
                 todoList={todoList}
