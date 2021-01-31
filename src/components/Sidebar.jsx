@@ -1,4 +1,5 @@
 import React from 'react';
+import Login from './Login';
 
 export default function Sidebar({ todoList, handleDomTodoList }) {
   const handleClick = (filterBy) => {
@@ -26,6 +27,9 @@ export default function Sidebar({ todoList, handleDomTodoList }) {
         </div>
         <div className="menu-item" onClick={() => handleClick('done')}>
           <i className="fas fa-check-square"></i>
+        </div>
+        <div className="menu-item" onClick={() => <Login />}>
+          <i className="fas fa-user"></i>
         </div>
       </div>
     </div>
