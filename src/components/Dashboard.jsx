@@ -108,6 +108,7 @@ export default function Dashboard() {
   const [searchText, setSearchText] = useState('');
   const [login, setLogin] = useState(false);
   const inputRef = useRef(null);
+  const todosRef = useRef(null);
 
   const now = new Date();
   const { short } = getFormattedDate(now);
@@ -147,6 +148,9 @@ export default function Dashboard() {
     };
 
     dispatch({ type: ACTION.ADD, payload: obj });
+    todosRef.current.scrollTo({
+      top: 0,
+    });
   };
 
   const handleShow = (text = '', id = '') => {
@@ -177,7 +181,7 @@ export default function Dashboard() {
         ) : (
           <>
             <SearchBar handleShow={handleShow} onSearch={setSearchText} />
-            <div className="todos-container">
+            <div className="todos-container" ref={todosRef}>
               <div className="todos">
                 {domTodoList.length > 0 ? (
                   domTodoList.map((t, idx) => (
@@ -189,8 +193,10 @@ export default function Dashboard() {
                       handleEdit={handleShow}
                     />
                   ))
-                ) : (
+                ) : !searchText ? (
                   <div className="empty">No todos yet here</div>
+                ) : (
+                  <div className="empty">No matching todos found</div>
                 )}
               </div>
             </div>
