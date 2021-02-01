@@ -11,6 +11,7 @@ import Sidebar from './Sidebar';
 import SearchBar from './SearchBar';
 
 import { getFormattedDate } from './../util';
+import Login from './Login';
 
 const list = [
   {
@@ -105,6 +106,7 @@ export default function Dashboard() {
   const [show, setShow] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({ text: '', id: '' });
   const [searchText, setSearchText] = useState('');
+  const [login, setLogin] = useState(false);
   const inputRef = useRef(null);
 
   const now = new Date();
@@ -115,6 +117,7 @@ export default function Dashboard() {
   };
 
   const handleSearch = useCallback(() => {
+    if (todoList.length < 1) return;
     const list = todoList.filter((i) => i.text.includes(searchText));
     handleDomTodoList(list);
   }, [searchText, todoList]);
@@ -161,24 +164,38 @@ export default function Dashboard() {
   return (
     <div className="dashboard">
       <aside>
-        <Sidebar todoList={todoList} handleDomTodoList={handleDomTodoList} />
+        <Sidebar
+          todoList={todoList}
+          handleDomTodoList={handleDomTodoList}
+          onLogin={setLogin}
+        />
       </aside>
 
       <main>
-        <SearchBar handleShow={handleShow} onSearch={setSearchText} />
-        <div className="todos-container">
-          <div className="todos">
-            {domTodoList.map((t, idx) => (
-              <Card
-                key={idx}
-                todoList={todoList}
-                todo={t}
-                dispatch={dispatch}
-                handleEdit={handleShow}
-              />
-            ))}
-          </div>
-        </div>
+        {login ? (
+          <Login />
+        ) : (
+          <>
+            <SearchBar handleShow={handleShow} onSearch={setSearchText} />
+            <div className="todos-container">
+              <div className="todos">
+                {domTodoList.length > 0 ? (
+                  domTodoList.map((t, idx) => (
+                    <Card
+                      key={idx}
+                      todoList={todoList}
+                      todo={t}
+                      dispatch={dispatch}
+                      handleEdit={handleShow}
+                    />
+                  ))
+                ) : (
+                  <div className="empty">No todos yet here</div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </main>
 
       <div

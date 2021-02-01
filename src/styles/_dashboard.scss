@@ -28,6 +28,16 @@
     flex-wrap: wrap;
     min-width: 100%;
 
+    .empty {
+      width: 100%;
+      height: 60vh;
+      font-size: 2rem;
+      color: $gray2;
+      font-weight: 700;
+      text-shadow: $textShadow;
+      @include center;
+    }
+
     @media (max-width: $md) {
       padding: 10px;
     }

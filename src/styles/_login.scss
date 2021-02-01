@@ -1,0 +1,35 @@
+.login {
+  @include center;
+  height: 100vh;
+}
+
+form {
+  padding: 15px;
+  background-color: $white;
+  width: 300px;
+  border: 1px solid $gray3;
+  border-radius: 5px;
+}
+
+.form-group {
+  label {
+    display: block;
+    padding: 5px 0;
+  }
+
+  input {
+    border: 1px solid $dark;
+    padding: 5px;
+    width: 100%;
+    margin-bottom: 15px;
+    font-family: $ff1;
+    font-size: 15px;
+    border-radius: 3px;
+  }
+}
+
+.btn-submit {
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 5px;
+}
