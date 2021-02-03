@@ -5,6 +5,8 @@ import React, {
   useRef,
   useCallback,
 } from 'react';
+import db from '../firebase';
+import firebase from 'firebase/app';
 import Card from './Card';
 import AddTodo from './AddTodo';
 import Sidebar from './Sidebar';
@@ -20,62 +22,6 @@ const list = [
     date: '21 January, 2020',
     favorite: false,
     id: 1,
-  },
-  {
-    status: 'Todo',
-    text: 'Try to practice boxing everyday',
-    date: '21 January, 2020',
-    favorite: true,
-    id: 2,
-  },
-  {
-    status: 'Todo',
-    text: 'Try to practice boxing everyday',
-    date: '21 January, 2020',
-    favorite: false,
-    id: 3,
-  },
-  {
-    status: 'Todo',
-    text: 'Try to practice boxing everyday',
-    date: '21 January, 2020',
-    favorite: false,
-    id: 4,
-  },
-  {
-    status: 'Todo',
-    text: 'Try to practice boxing everyday',
-    date: '21 January, 2020',
-    favorite: false,
-    id: 5,
-  },
-  {
-    status: 'Todo',
-    text: 'Try to practice boxing everyday',
-    date: '21 January, 2020',
-    favorite: false,
-    id: 6,
-  },
-  {
-    status: 'Todo',
-    text: 'Try to practice boxing everyday',
-    date: '21 January, 2020',
-    favorite: false,
-    id: 7,
-  },
-  {
-    status: 'Todo',
-    text: 'Try to practice boxing everyday',
-    date: '21 January, 2020',
-    favorite: false,
-    id: 8,
-  },
-  {
-    status: 'Todo',
-    text: 'Try to practice boxing everyday',
-    date: '21 January, 2020',
-    favorite: false,
-    id: 9,
   },
 ];
 
@@ -126,6 +72,18 @@ export default function Dashboard() {
   useEffect(() => {
     handleDomTodoList(todoList);
     handleSearch();
+
+    db.collection('todos').onSnapshot((snapshot) => {
+      const obj = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          name: doc.data().todos,
+          datatime: doc.data().datatime,
+        };
+      });
+      console.log(obj);
+      // dispatch({ type: ACTION.UPDATE, payload: obj });
+    });
   }, [todoList, handleSearch]);
 
   const handleAddTodo = (text, id = '') => {
@@ -150,6 +108,10 @@ export default function Dashboard() {
     dispatch({ type: ACTION.ADD, payload: obj });
     todosRef.current.scrollTo({
       top: 0,
+    });
+    db.collection('todos').add({
+      todo: obj,
+      datetime: firebase.firestore.FieldValue.serverTimestamp(),
     });
   };
 
