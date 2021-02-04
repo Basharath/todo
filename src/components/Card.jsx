@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { ACTION } from './Dashboard';
+import { db } from './../firebase';
 
 export default function Card({ todo, dispatch, todoList, handleEdit }) {
   const { status, text, date, favorite, id } = todo;
@@ -9,7 +10,6 @@ export default function Card({ todo, dispatch, todoList, handleEdit }) {
     const updated = [...todoList];
     const index = todoList.findIndex((i) => i.id === id);
     updated[index] = todo;
-
     dispatch({ type: ACTION.UPDATE, payload: updated });
   };
 
@@ -17,13 +17,16 @@ export default function Card({ todo, dispatch, todoList, handleEdit }) {
     const todoCopy = todo;
     todoCopy.favorite = !favorite;
     updateTodo(todoCopy);
+    db.collection('todos').doc(id).update({ favorite: !favorite });
   };
 
   const handleStatus = () => {
-    const newStatus = status === 'Todo' ? 'Started' : 'Done';
+    const newStatus =
+      status === 'Todo' ? 'Started' : status === 'Done' ? 'Todo' : 'Done';
     const todoCopy = todo;
     todoCopy.status = newStatus;
     updateTodo(todoCopy);
+    db.collection('todos').doc(id).update({ status: newStatus });
   };
 
   const style =
@@ -41,7 +44,7 @@ export default function Card({ todo, dispatch, todoList, handleEdit }) {
       : 'check';
 
   return (
-    <div className="card">
+    <div className="card" key={id}>
       <div className="status" style={style}>
         {status}
       </div>

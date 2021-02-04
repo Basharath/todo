@@ -1,12 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  useReducer,
-  useRef,
-  useCallback,
-} from 'react';
-import db from '../firebase';
-import firebase from 'firebase/app';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
+import { db } from '../firebase';
 import Card from './Card';
 import AddTodo from './AddTodo';
 import Sidebar from './Sidebar';
@@ -14,16 +7,6 @@ import SearchBar from './SearchBar';
 
 import { getFormattedDate } from './../util';
 import Login from './Login';
-
-const list = [
-  {
-    status: 'Todo',
-    text: 'Try to practice boxing everyday',
-    date: '21 January, 2020',
-    favorite: false,
-    id: 1,
-  },
-];
 
 export const ACTION = {
   ADD: 'add',
@@ -47,7 +30,7 @@ const reducer = (state, action) => {
 };
 
 export default function Dashboard() {
-  const [todoList, dispatch] = useReducer(reducer, list);
+  const [todoList, dispatch] = useReducer(reducer, '');
   const [domTodoList, setDomTodoList] = useState(todoList);
   const [show, setShow] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({ text: '', id: '' });
@@ -55,6 +38,7 @@ export default function Dashboard() {
   const [login, setLogin] = useState(false);
   const inputRef = useRef(null);
   const todosRef = useRef(null);
+  const [isMount, setIsMount] = useState(false);
 
   const now = new Date();
   const { short } = getFormattedDate(now);
@@ -63,28 +47,40 @@ export default function Dashboard() {
     setDomTodoList(list);
   };
 
-  const handleSearch = useCallback(() => {
-    if (todoList.length < 1) return;
-    const list = todoList.filter((i) => i.text.includes(searchText));
-    handleDomTodoList(list);
-  }, [searchText, todoList]);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const filtered = todoList.filter((i) =>
+      i.text.toLowerCase().includes(searchText.toLowerCase())
+    );
+    handleDomTodoList(filtered);
+  };
+
+  const dataInit = () => {
+    db.collection('todos')
+      .orderBy('time', 'desc')
+      .onSnapshot(async (querySnapshot) => {
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          date: doc.data().date,
+          text: doc.data().text,
+          status: doc.data().status,
+          favorite: doc.data().favorite,
+        }));
+        dispatch({ type: ACTION.UPDATE, payload: data });
+        setDomTodoList(data);
+      });
+  };
 
   useEffect(() => {
-    handleDomTodoList(todoList);
-    handleSearch();
+    if (!isMount) {
+      dataInit();
+      setIsMount(true);
+    }
 
-    db.collection('todos').onSnapshot((snapshot) => {
-      const obj = snapshot.docs.map((doc) => {
-        return {
-          id: doc.id,
-          name: doc.data().todos,
-          datatime: doc.data().datatime,
-        };
-      });
-      console.log(obj);
-      // dispatch({ type: ACTION.UPDATE, payload: obj });
-    });
-  }, [todoList, handleSearch]);
+    if (!searchText) {
+      handleDomTodoList(todoList);
+    }
+  }, [searchText, isMount, todoList]);
 
   const handleAddTodo = (text, id = '') => {
     if (id) {
@@ -94,6 +90,10 @@ export default function Dashboard() {
       const updated = [...todoList];
       updated[index] = todo;
       dispatch({ type: ACTION.UPDATE, payload: updated });
+      db.collection('todos').doc(id).update({
+        text,
+      });
+
       return;
     }
 
@@ -102,16 +102,16 @@ export default function Dashboard() {
       status: 'Todo',
       date: short,
       favorite: false,
-      id: new Date().getTime(),
+      time: new Date().getTime(),
     };
 
     dispatch({ type: ACTION.ADD, payload: obj });
     todosRef.current.scrollTo({
       top: 0,
     });
+
     db.collection('todos').add({
-      todo: obj,
-      datetime: firebase.firestore.FieldValue.serverTimestamp(),
+      ...obj,
     });
   };
 
@@ -125,6 +125,7 @@ export default function Dashboard() {
   const handleDelete = (id) => {
     const filtered = todoList.filter((i) => i.id !== id);
     dispatch({ type: ACTION.UPDATE, payload: filtered });
+    db.collection('todos').doc(id).delete();
   };
 
   return (
@@ -142,7 +143,11 @@ export default function Dashboard() {
           <Login />
         ) : (
           <>
-            <SearchBar handleShow={handleShow} onSearch={setSearchText} />
+            <SearchBar
+              handleShow={handleShow}
+              handleSearch={handleSearch}
+              onSearch={setSearchText}
+            />
             <div className="todos-container" ref={todosRef}>
               <div className="todos">
                 {domTodoList.length > 0 ? (

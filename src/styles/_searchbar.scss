@@ -13,6 +13,10 @@
 .search-group {
   display: flex;
   margin: 15px 20px 10px 0;
+  border: none;
+  background: none;
+  width: auto;
+
   .search {
     i {
       vertical-align: middle;
