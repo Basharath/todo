@@ -1,23 +1,23 @@
 import React from 'react';
 
-import { ACTION } from './Dashboard';
-import { db } from './../firebase';
+import { db } from '../firebase/init';
 
-export default function Card({ todo, dispatch, todoList, handleEdit }) {
+export default function Card({ todo, onUpdate, todoList, handleEdit, user }) {
   const { status, text, date, favorite, id } = todo;
+  const userDb = db.collection('users').doc(user);
 
   const updateTodo = (todo) => {
     const updated = [...todoList];
     const index = todoList.findIndex((i) => i.id === id);
     updated[index] = todo;
-    dispatch({ type: ACTION.UPDATE, payload: updated });
+    onUpdate(updated);
   };
 
   const handleFavorite = () => {
     const todoCopy = todo;
     todoCopy.favorite = !favorite;
     updateTodo(todoCopy);
-    db.collection('todos').doc(id).update({ favorite: !favorite });
+    userDb.collection('todos').doc(id).update({ favorite: !favorite });
   };
 
   const handleStatus = () => {
@@ -26,7 +26,7 @@ export default function Card({ todo, dispatch, todoList, handleEdit }) {
     const todoCopy = todo;
     todoCopy.status = newStatus;
     updateTodo(todoCopy);
-    db.collection('todos').doc(id).update({ status: newStatus });
+    userDb.collection('todos').doc(id).update({ status: newStatus });
   };
 
   const style =

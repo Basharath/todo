@@ -3,7 +3,7 @@
   height: 80vh;
 }
 
-form {
+.form {
   padding: 15px;
   background-color: $white;
   width: 300px;
@@ -32,4 +32,10 @@ form {
   border-radius: 5px;
   width: 100%;
   margin-top: 5px;
+  font-size: 1rem;
+  line-height: 20px;
+  @include center;
+  i {
+    margin-right: 10px;
+  }
 }

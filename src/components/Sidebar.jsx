@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
-export default function Sidebar({ todoList, handleDomTodoList, onLogin }) {
-  const [active, setActive] = useState('all');
+import { signOut } from '../firebase/auth';
+
+export default function Sidebar({ todoList, handleDomTodoList, loggedIn }) {
+  const [active, setActive] = useState('');
 
   const handleClick = (filterBy) => {
     setActive(filterBy);
-    onLogin(false);
     let filtered;
     if (filterBy === 'favorite') {
       filtered = todoList.filter((i) => i.favorite);
@@ -18,7 +19,12 @@ export default function Sidebar({ todoList, handleDomTodoList, onLogin }) {
   };
 
   const handleLogin = () => {
-    onLogin(true);
+    // signIn();
+    setActive('');
+  };
+
+  const handleLogout = () => {
+    signOut();
     setActive('login');
   };
 
@@ -54,12 +60,22 @@ export default function Sidebar({ todoList, handleDomTodoList, onLogin }) {
         >
           <i className="fas fa-check-square"></i>
         </div>
-        <div
-          className={'menu-item' + (active === 'login' ? ' active' : '')}
-          onClick={handleLogin}
-        >
-          <i className="fas fa-user"></i>
-        </div>
+        {loggedIn ? (
+          <div
+            className={'menu-item' + (active === 'login' ? ' active' : '')}
+            onClick={handleLogout}
+            title="Signout"
+          >
+            <i className="fas fa-sign-out-alt"></i>
+          </div>
+        ) : (
+          <div
+            className={'menu-item' + (active === 'login' ? ' active' : '')}
+            onClick={handleLogin}
+          >
+            <i className="fas fa-user"></i>
+          </div>
+        )}
       </div>
     </div>
   );

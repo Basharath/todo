@@ -1,44 +1,24 @@
-import React, { useState, useEffect, useReducer, useRef } from 'react';
-import { db } from '../firebase';
-import Card from './Card';
-import AddTodo from './AddTodo';
-import Sidebar from './Sidebar';
-import SearchBar from './SearchBar';
-
+import React, { useState, useEffect, useRef } from 'react';
+import { db, auth } from '../firebase/init';
 import { getFormattedDate } from './../util';
+
+import SearchBar from './SearchBar';
+import Sidebar from './Sidebar';
+import AddTodo from './AddTodo';
+import Card from './Card';
 import Login from './Login';
 
-export const ACTION = {
-  ADD: 'add',
-  DELETE: 'delete',
-  EDIT: 'edit',
-  FAVORITE: 'favorite',
-  UPDATE: 'update',
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case ACTION.ADD:
-      return [action.payload, ...state];
-
-    case ACTION.UPDATE:
-      return [...action.payload];
-
-    default:
-      return state;
-  }
-};
-
 export default function Dashboard() {
-  const [todoList, dispatch] = useReducer(reducer, '');
+  const [loggedIn, setLoggedIn] = useState(null);
+  const [todoList, setTodoList] = useState([]);
   const [domTodoList, setDomTodoList] = useState(todoList);
   const [show, setShow] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({ text: '', id: '' });
   const [searchText, setSearchText] = useState('');
-  const [login, setLogin] = useState(false);
   const inputRef = useRef(null);
   const todosRef = useRef(null);
-  const [isMount, setIsMount] = useState(false);
+
+  const userDb = loggedIn ? db.collection('users').doc(loggedIn) : '';
 
   const now = new Date();
   const { short } = getFormattedDate(now);
@@ -55,32 +35,41 @@ export default function Dashboard() {
     handleDomTodoList(filtered);
   };
 
-  const dataInit = () => {
-    db.collection('todos')
+  const fetchData = (userId) => {
+    db.collection('users')
+      .doc(userId)
+      .collection('todos')
       .orderBy('time', 'desc')
       .onSnapshot(async (querySnapshot) => {
-        const data = querySnapshot.docs.map((doc) => ({
+        const data = await querySnapshot.docs.map((doc) => ({
           id: doc.id,
           date: doc.data().date,
           text: doc.data().text,
           status: doc.data().status,
           favorite: doc.data().favorite,
         }));
-        dispatch({ type: ACTION.UPDATE, payload: data });
-        setDomTodoList(data);
+        setTodoList(data);
       });
   };
 
   useEffect(() => {
-    if (!isMount) {
-      dataInit();
-      setIsMount(true);
-    }
-
     if (!searchText) {
       handleDomTodoList(todoList);
     }
-  }, [searchText, isMount, todoList]);
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        if (!loggedIn) {
+          const userId = user.uid.toString();
+          setLoggedIn(userId);
+          fetchData(userId);
+          handleDomTodoList(todoList);
+        }
+      } else {
+        setLoggedIn(null);
+      }
+    });
+  }, [searchText, todoList, loggedIn]);
 
   const handleAddTodo = (text, id = '') => {
     if (id) {
@@ -89,8 +78,8 @@ export default function Dashboard() {
       todo.text = text;
       const updated = [...todoList];
       updated[index] = todo;
-      dispatch({ type: ACTION.UPDATE, payload: updated });
-      db.collection('todos').doc(id).update({
+      setTodoList(updated);
+      userDb.collection('todos').doc(id).update({
         text,
       });
 
@@ -105,12 +94,12 @@ export default function Dashboard() {
       time: new Date().getTime(),
     };
 
-    dispatch({ type: ACTION.ADD, payload: obj });
+    setTodoList([obj, ...todoList]);
     todosRef.current.scrollTo({
       top: 0,
     });
 
-    db.collection('todos').add({
+    userDb.collection('todos').add({
       ...obj,
     });
   };
@@ -124,8 +113,8 @@ export default function Dashboard() {
 
   const handleDelete = (id) => {
     const filtered = todoList.filter((i) => i.id !== id);
-    dispatch({ type: ACTION.UPDATE, payload: filtered });
-    db.collection('todos').doc(id).delete();
+    setTodoList(filtered);
+    userDb.collection('todos').doc(id).delete();
   };
 
   return (
@@ -134,12 +123,12 @@ export default function Dashboard() {
         <Sidebar
           todoList={todoList}
           handleDomTodoList={handleDomTodoList}
-          onLogin={setLogin}
+          loggedIn={loggedIn}
         />
       </aside>
 
       <main>
-        {login ? (
+        {!loggedIn ? (
           <Login />
         ) : (
           <>
@@ -156,8 +145,9 @@ export default function Dashboard() {
                       key={idx}
                       todoList={todoList}
                       todo={t}
-                      dispatch={dispatch}
+                      onUpdate={setTodoList}
                       handleEdit={handleShow}
+                      user={loggedIn}
                     />
                   ))
                 ) : !searchText ? (

@@ -1,19 +1,14 @@
 import React from 'react';
+import { signIn } from '../firebase/auth';
 
 export default function Login() {
   return (
     <div className="login">
-      <form>
-        <div className="form-group">
-          <label htmlFor="name">Email</label>
-          <input type="email" />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input type="password" />
-        </div>
-        <button className="btn btn-submit">Submit</button>
-      </form>
+      <div className="form">
+        <button className="btn btn-submit" onClick={signIn}>
+          <i className="fab fa-google"></i> Login using Google
+        </button>
+      </div>
     </div>
   );
 }
