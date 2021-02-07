@@ -31,11 +31,15 @@
 .btn-submit {
   border-radius: 5px;
   width: 100%;
-  margin-top: 5px;
+  margin-bottom: 10px;
   font-size: 1rem;
   line-height: 20px;
   @include center;
   i {
     margin-right: 10px;
   }
+}
+
+.btn-submit:last-child {
+  margin-bottom: 0;
 }

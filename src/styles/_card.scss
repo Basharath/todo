@@ -86,8 +86,10 @@
       font-size: 1.1rem;
       color: $lightBackground;
 
-      &:hover {
-        color: $red;
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          color: $red;
+        }
       }
     }
 

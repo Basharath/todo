@@ -36,11 +36,16 @@ export default function AddTodo({
     setInput('');
   };
 
+  const handleClose = () => {
+    handleShow();
+    setInput('');
+  };
+
   return (
     <div className="add-todo" onClick={(e) => e.stopPropagation()}>
       <div className="status">Todo</div>
 
-      <div className="close" onClick={handleShow}>
+      <div className="close" onClick={handleClose}>
         <i className="fas fa-times"></i>
       </div>
 

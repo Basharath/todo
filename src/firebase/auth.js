@@ -1,9 +1,12 @@
 import { firebase, auth } from './init';
 
-const signIn = async () => {
+const signInGoogle = async () => {
   const provider = new firebase.auth.GoogleAuthProvider();
   await auth.signInWithPopup(provider);
 };
+const signInTwitter = async () => {};
+const signInGithub = async () => {};
+const signInGuest = async () => {};
 
 const signOut = async () => {
   await auth.signOut();
@@ -13,4 +16,4 @@ const signOut = async () => {
   // });
 };
 
-export { signIn, signOut };
+export { signInGoogle, signInGuest, signInTwitter, signInGithub, signOut };
