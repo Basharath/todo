@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [show, setShow] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({ text: '', id: '' });
   const [searchText, setSearchText] = useState('');
+  const [isGuest, setIsGuest] = useState(false);
   const inputRef = useRef(null);
   const todosRef = useRef(null);
 
@@ -79,12 +80,20 @@ export default function Dashboard() {
       const updated = [...todoList];
       updated[index] = todo;
       setTodoList(updated);
-      userDb.collection('todos').doc(id).update({
-        text,
-      });
+      if (!isGuest) {
+        userDb.collection('todos').doc(id).update({
+          text,
+        });
+      }
 
       return;
     }
+
+    let optionalProp = isGuest
+      ? {
+          id: new Date().getTime(),
+        }
+      : {};
 
     const obj = {
       text,
@@ -92,6 +101,7 @@ export default function Dashboard() {
       date: short,
       favorite: false,
       time: new Date().getTime(),
+      ...optionalProp,
     };
 
     setTodoList([obj, ...todoList]);
@@ -99,9 +109,12 @@ export default function Dashboard() {
       top: 0,
     });
 
-    userDb.collection('todos').add({
-      ...obj,
-    });
+    if (!isGuest) {
+      userDb.collection('todos').add({
+        ...obj,
+      });
+      return;
+    }
   };
 
   const handleShow = (text = '', id = '') => {
@@ -114,7 +127,9 @@ export default function Dashboard() {
   const handleDelete = (id) => {
     const filtered = todoList.filter((i) => i.id !== id);
     setTodoList(filtered);
-    userDb.collection('todos').doc(id).delete();
+    if (!isGuest) {
+      userDb.collection('todos').doc(id).delete();
+    }
   };
 
   return (
@@ -124,12 +139,13 @@ export default function Dashboard() {
           todoList={todoList}
           handleDomTodoList={handleDomTodoList}
           loggedIn={loggedIn}
+          asGuest={setIsGuest}
         />
       </aside>
 
       <main>
-        {!loggedIn ? (
-          <Login />
+        {!loggedIn && !isGuest ? (
+          <Login asGuest={setIsGuest} />
         ) : (
           <>
             <SearchBar
@@ -148,6 +164,7 @@ export default function Dashboard() {
                       onUpdate={setTodoList}
                       handleEdit={handleShow}
                       user={loggedIn}
+                      isGuest={isGuest}
                     />
                   ))
                 ) : !searchText ? (

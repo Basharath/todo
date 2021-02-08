@@ -2,9 +2,16 @@ import React from 'react';
 
 import { db } from '../firebase/init';
 
-export default function Card({ todo, onUpdate, todoList, handleEdit, user }) {
+export default function Card({
+  todo,
+  onUpdate,
+  todoList,
+  handleEdit,
+  user,
+  isGuest,
+}) {
   const { status, text, date, favorite, id } = todo;
-  const userDb = db.collection('users').doc(user);
+  const userDb = !isGuest && db.collection('users').doc(user);
 
   const updateTodo = (todo) => {
     const updated = [...todoList];
@@ -17,7 +24,9 @@ export default function Card({ todo, onUpdate, todoList, handleEdit, user }) {
     const todoCopy = todo;
     todoCopy.favorite = !favorite;
     updateTodo(todoCopy);
-    userDb.collection('todos').doc(id).update({ favorite: !favorite });
+    if (!isGuest) {
+      userDb.collection('todos').doc(id).update({ favorite: !favorite });
+    }
   };
 
   const handleStatus = () => {
@@ -26,7 +35,9 @@ export default function Card({ todo, onUpdate, todoList, handleEdit, user }) {
     const todoCopy = todo;
     todoCopy.status = newStatus;
     updateTodo(todoCopy);
-    userDb.collection('todos').doc(id).update({ status: newStatus });
+    if (!isGuest) {
+      userDb.collection('todos').doc(id).update({ status: newStatus });
+    }
   };
 
   const style =

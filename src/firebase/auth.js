@@ -6,7 +6,6 @@ const signInGoogle = async () => {
 };
 const signInTwitter = async () => {};
 const signInGithub = async () => {};
-const signInGuest = async () => {};
 
 const signOut = async () => {
   await auth.signOut();
@@ -16,4 +15,4 @@ const signOut = async () => {
   // });
 };
 
-export { signInGoogle, signInGuest, signInTwitter, signInGithub, signOut };
+export { signInGoogle, signInTwitter, signInGithub, signOut };

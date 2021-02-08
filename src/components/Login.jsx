@@ -1,16 +1,11 @@
 import React from 'react';
-import {
-  signInGoogle,
-  signInGithub,
-  signInGuest,
-  signInTwitter,
-} from '../firebase/auth';
+import { signInGoogle, signInGithub, signInTwitter } from '../firebase/auth';
 
-export default function Login() {
+export default function Login({ asGuest }) {
   return (
     <div className="login">
       <div className="form">
-        <button className="btn btn-submit" onClick={signInGuest}>
+        <button className="btn btn-submit" onClick={() => asGuest(true)}>
           <i className="fas fa-user"></i> Login as Guest
         </button>
         <button className="btn btn-submit" onClick={signInGoogle}>

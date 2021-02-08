@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 
 import { signOut } from '../firebase/auth';
 
-export default function Sidebar({ todoList, handleDomTodoList, loggedIn }) {
+export default function Sidebar({
+  todoList,
+  handleDomTodoList,
+  loggedIn,
+  asGuest,
+}) {
   const [active, setActive] = useState('');
 
   const handleClick = (filterBy) => {
@@ -21,6 +26,7 @@ export default function Sidebar({ todoList, handleDomTodoList, loggedIn }) {
   const handleLogin = () => {
     // signIn();
     setActive('');
+    asGuest(false);
   };
 
   const handleLogout = () => {
