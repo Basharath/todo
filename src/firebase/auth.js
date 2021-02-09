@@ -5,7 +5,10 @@ const signInGoogle = async () => {
   await auth.signInWithPopup(provider);
 };
 const signInTwitter = async () => {};
-const signInGithub = async () => {};
+const signInGithub = async () => {
+  const provider = new firebase.auth.GithubAuthProvider();
+  await auth.signInWithPopup(provider);
+};
 
 const signOut = async () => {
   await auth.signOut();

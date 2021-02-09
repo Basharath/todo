@@ -140,6 +140,7 @@ export default function Dashboard() {
           handleDomTodoList={handleDomTodoList}
           loggedIn={loggedIn}
           asGuest={setIsGuest}
+          onLogout={setTodoList}
         />
       </aside>
 

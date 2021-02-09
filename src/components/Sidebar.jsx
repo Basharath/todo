@@ -7,6 +7,7 @@ export default function Sidebar({
   handleDomTodoList,
   loggedIn,
   asGuest,
+  onLogout,
 }) {
   const [active, setActive] = useState('');
 
@@ -31,6 +32,7 @@ export default function Sidebar({
 
   const handleLogout = () => {
     signOut();
+    onLogout([]);
     setActive('login');
   };
 
