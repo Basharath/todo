@@ -3,7 +3,7 @@ $primary_hover: #107dac;
 $secondary: #40e0d0;
 $secondary_hover: #3bd6c6;
 $green: #00df00;
-$red: tomato;
+$red: #ff6347;
 $black: #0c0c0c;
 $white: #fcfcfc;
 $dark: #2b3439;
@@ -87,7 +87,7 @@ $gray3: #a7adba;
 body {
   font-family: $ff1;
   // width: 100vw;
-  // background: $background;
+  // background: $lightBackground;
   // color: $light;
   position: relative;
 }
