@@ -133,7 +133,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="dashboard">
+    <div className='dashboard'>
       <aside>
         <Sidebar
           todoList={todoList}
@@ -154,8 +154,8 @@ export default function Dashboard() {
               handleSearch={handleSearch}
               onSearch={setSearchText}
             />
-            <div className="todos-container" ref={todosRef}>
-              <div className="todos">
+            <div className='todos-container' ref={todosRef}>
+              <div className='todos'>
                 {domTodoList.length > 0 ? (
                   domTodoList.map((t, idx) => (
                     <Card
@@ -169,9 +169,9 @@ export default function Dashboard() {
                     />
                   ))
                 ) : !searchText ? (
-                  <div className="empty">No todos yet here</div>
+                  <div className='empty'>No todos yet here</div>
                 ) : (
-                  <div className="empty">No matching todos found</div>
+                  <div className='empty'>No matching todos found</div>
                 )}
               </div>
             </div>

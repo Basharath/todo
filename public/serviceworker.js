@@ -1,5 +1,7 @@
 const cacheName = 'v1';
 
+const self = this;
+
 self.addEventListener('install', () => {
   // console.log('Service worker installed');
 });
@@ -23,6 +25,11 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   // console.log('Service worker Fetching');
+
+  if (e.request.method !== 'GET') {
+    console.log('WORKER: fetch e ignored.');
+    return;
+  }
 
   e.respondWith(
     fetch(e.request)
